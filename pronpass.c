@@ -1364,7 +1364,7 @@ gen_word (char *word, char *hyphenated_word, USHORT pwlen, unsigned int pass_mod
       * Get the syllable and find its length.
       */
      (void) gen_syllable (new_syllable, pwlen - word_length, syllable_units, &syllable_size);
-     syllable_length = strlen (new_syllable);
+     syllable_length = (SHORT) strlen (new_syllable);
      
      /*
       * Append the syllable units to the word units.
@@ -1734,7 +1734,7 @@ gen_syllable (char *syllable, USHORT pwlen, USHORT *units_in_syllable,
                    vowel_count++;
                current_unit++;
                (void) strcpy (syllable, rules[saved_pair[1]].unit_code);
-               length_left -= strlen (syllable);
+               length_left -= (SHORT) strlen (syllable);
               }
 
               /* 

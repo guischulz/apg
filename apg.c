@@ -112,7 +112,7 @@ main (int argc, char *argv[])
  int restrict_res = 0;
  
  char *pass_string;
- char *hyph_pass_string;
+ char *hyph_pass_string = NULL;
  time_t tme;
  
  
@@ -141,7 +141,7 @@ main (int argc, char *argv[])
  char *str_mode;                         /* string mode pointer             */
 #ifndef CLISERV
  char *com_line_seq;
- char *spell_pass_string;
+ char *spell_pass_string = NULL;
  int spell_present = FALSE;              /* spell password mode flag        */
  unsigned int delimiter_flag_present = FALSE;
 #ifdef APG_USE_CRYPT
@@ -290,10 +290,12 @@ main (int argc, char *argv[])
     mode.pass = mode.pass | S_RS;
  if( (tme = time(NULL)) == ( (time_t)-1))
     err_sys("time");
+#ifndef _MSC_VER
  if (user_defined_seed_present != TRUE)
     x917_setseed ( (UINT32)tme, quiet_present);
  else
     x917_setseed (user_defined_seed ^ (UINT32)tme, quiet_present);
+#endif /* _MSC_VER */
  if (min_pass_length > max_pass_length)
     max_pass_length = min_pass_length;
  /* main code section */
@@ -681,7 +683,7 @@ char * crypt_passstring (const char *p)
 void
 checkopt(char *opt)
 {
- int i;
+ unsigned int i;
 
  for(i=0; i < strlen(opt);i++)
   if(opt[i] != '0' && opt[i] != '1' && opt[i] != '2' && opt[i] != '3' &&

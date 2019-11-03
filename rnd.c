@@ -27,6 +27,10 @@
 ** SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 */
 
+#ifdef _MSC_VER
+#define _CRT_RAND_S  // define this before including <stdlib.h> to get rand_s
+#endif /* _MSC_VER */
+
 #include <stdio.h>
 #include <stdlib.h>
 #if !defined(WIN32) && !defined(_WIN32) && !defined(__WIN32) && !defined(__WIN32__)
@@ -35,7 +39,9 @@
 #include <string.h>
 #include <unistd.h>
 #include <sys/types.h>
+#ifndef _MSC_VER
 #include <sys/time.h>
+#endif /* _MSC_VER */
 #include "rnd.h"
 
 #ifndef APG_USE_SHA 
@@ -58,13 +64,20 @@ UINT32 __rnd_seed[2]; /* Random Seed 2*32=64 */
 UINT
 randint(int n)
 {
+#ifdef _MSC_VER
+  UINT number;
+  rand_s(&number);
+  return (number % (UINT32)n);
+#else /* _MSC_VER */
 #ifndef APG_USE_SHA
  return ( (UINT)( x917cast_rnd() % (UINT32)n ) );
 #else /* APG_USE_SHA */
  return ( (UINT)( x917sha1_rnd() % (UINT32)n ) );
 #endif /* APG_USE_SHA */
+#endif /* _MSC_VER */
 }
 
+#ifndef _MSC_VER
 #ifndef APG_USE_SHA
 /*
 ** ANSI X9.17 pseudorandom generator that uses CAST algorithm instead of DES
@@ -212,3 +225,4 @@ x917_setseed (UINT32 seed, int quiet)
    __rnd_seed[1] = seed ^ pid;
   }
 }
+#endif /* _MSC_VER */

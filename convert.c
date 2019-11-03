@@ -131,7 +131,7 @@ numerize (char *syllable)
  char *tmp;
  if ( (tmp = (char *)calloc(1, 4)) == NULL)
     err_sys_fatal("calloc");
- if ( strlen (syllable) == 1 )
+ if ( strlen (syllable) == 1 && tmp)
       {
        (void) gen_rand_symbol(tmp, S_NB);
        (void)memcpy ((void *)syllable, (void *)tmp, 1);
@@ -157,7 +157,7 @@ specialize (char *syllable)
  char *tmp;
  if ( (tmp = (char *)calloc(1, 4)) == NULL)
     err_sys_fatal("calloc");
- if ( strlen (syllable) == 1 )
+ if ( strlen (syllable) == 1 && tmp)
       {
        (void) gen_rand_symbol(tmp, S_SS);
        (void)memcpy ((void *)syllable, (void *)tmp, 1);
